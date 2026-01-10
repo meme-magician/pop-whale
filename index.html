@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>popwhale</title>
+    <link rel="icon" type="image/png" href="./images/whale_popped.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0a1f5e 0%, #1a5f8f 50%, #2a8fbd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .header {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .icon-circle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .icon-circle img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .icon-link {
+            text-decoration: none;
+            display: flex;
+        }
+
+        .title-section {
+            text-align: center;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .addy {
+            margin-top: 18px;
+            background: #ffffff;
+            color: #022f4b;
+            padding: 8px 14px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 14px;
+            user-select: all;
+            transition: background 0.15s ease, transform 0.08s ease;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06) inset;
+        }
+
+        .addy:hover {
+            background: #f7fbfd;
+            transform: translateY(-2px);
+        }
+
+        .addy.copied {
+            background: #007ea7;
+            color: white;
+        }
+
+
+
+        .number-section {
+            color: white;
+            font-size: 72px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .whale-container {
+            width: 806px;
+            height: 806px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whale-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+        }
+
+        .counter-section {
+            position: absolute;
+            bottom: 30px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .counter {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .whale-container {
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            user-select: none;
+        }
+
+        .whale-container:active {
+            transform: scale(0.95);
+        }
+
+        .whale-bounce {
+            animation: bounce 0.6s ease;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            25% {
+                transform: translateY(-20px) scale(1.05);
+            }
+            50% {
+                transform: translateY(-40px) scale(1.1);
+            }
+            75% {
+                transform: translateY(-20px) scale(1.05);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .mouth-open {
+            animation: mouthOpen 0.6s ease;
+        }
+
+        @keyframes mouthOpen {
+            0%, 100% {
+                d: path('M 95 75 Q 100 78 105 75');
+            }
+            50% {
+                d: path('M 95 75 Q 100 85 105 75');
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title-section {
+                font-size: 36px;
+            }
+
+            .number-section {
+                font-size: 48px;
+            }
+
+            .whale-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .counter-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="icons">
+            <!-- PUMP: Replace ./images/pump.png with your image and update ca.pump link -->
+            <a id="pumpLink" target="_blank" class="icon-link">
+                <div class="icon-circle">
+                    <img src="./images/pump.png" alt="Pump">
+                </div>
+            </a>
+            
+            <!-- DEX: Replace ./images/dex.png with your image and update ca.dex link -->
+            <a id="dexLink" target="_blank" class="icon-link">
+                <div class="icon-circle">
+                    <img src="./images/dex.png" alt="DEX">
+                </div>
+            </a>
+            
+            <!-- AXIOM: Replace ./images/axiom.png with your image and update ca.axiom link -->
+            <a id="axiomLink" target="_blank" class="icon-link">
+                <div class="icon-circle">
+                    <img src="./images/axiom.png" alt="Axiom">
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="title-section">popwhale</div>
+    <div class="number-section" id="counter">0</div>
+
+    <div class="whale-container" id="whaleContainer">
+        <img src="./images/whale_unpopped.png" alt="White Whale" id="whaleImage">
+    </div>
+
+    <!-- Address (copyable) placed under the whale image -->
+    <div id="addyDisplay" class="addy" role="button" aria-label="Click to copy address" title="Click to copy address">C5abVpFgKa2whKgW4DSRnoEjL8b48uPKi2aKBd4c</div>
+
+    <script>
+        // Configure links for the bubbles
+        const addy = "C5abVpFgKa2whKgW4DSRnoEjL8b48uPKi2aKBd4cpump";
+        const ca = {
+            pump: "https://pump.fun/coin/" + addy,
+            dex: "https://dexscreener.com/solana/" + addy,
+            axiom: "https://axiom.trade/meme/" + addy
+        };
+
+        let count = 0;
+
+        const whaleContainer = document.getElementById('whaleContainer');
+        const whaleImage = document.getElementById('whaleImage');
+
+        // Set links from ca variable
+        document.getElementById('pumpLink').href = ca.pump;
+        document.getElementById('dexLink').href = ca.dex;
+        document.getElementById('axiomLink').href = ca.axiom;
+
+        // Wire up addy copy behavior
+        const addyDisplay = document.getElementById('addyDisplay');
+        // ensure displayed text matches variable
+        addyDisplay.textContent = addy;
+
+        addyDisplay.addEventListener('click', async () => {
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(addy);
+                } else {
+                    // fallback
+                    const t = document.createElement('textarea');
+                    t.value = addy;
+                    document.body.appendChild(t);
+                    t.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(t);
+                }
+                // visual feedback
+                addyDisplay.classList.add('copied');
+                const previous = addyDisplay.textContent;
+                addyDisplay.textContent = 'Copied!';
+                setTimeout(() => {
+                    addyDisplay.classList.remove('copied');
+                    addyDisplay.textContent = previous;
+                }, 1400);
+            } catch (err) {
+                console.error('copy failed', err);
+            }
+        });
+
+        whaleContainer.addEventListener('mousedown', (e) => {
+            if (e.button === 0) { // MB1 (left click)
+                count++;
+                document.getElementById('counter').textContent = count;
+                
+                // Change to popped image
+                whaleImage.src = './images/whale_popped.png';
+                
+                // Remove and re-add bounce animation
+                whaleContainer.classList.remove('whale-bounce');
+                void whaleContainer.offsetWidth;
+                whaleContainer.classList.add('whale-bounce');
+            }
+        });
+
+        whaleContainer.addEventListener('mouseup', (e) => {
+            if (e.button === 0) { // MB1 (left click)
+                // Change back to unpopped image
+                whaleImage.src = './images/whale_unpopped.png';
+            }
+        });
+
+        whaleContainer.addEventListener('mouseleave', () => {
+            // Change back to unpopped if mouse leaves while pressed
+            whaleImage.src = './images/whale_unpopped.png';
+            whaleContainer.classList.remove('whale-bounce');
+        });
+    </script>
+</body>
+</html>
