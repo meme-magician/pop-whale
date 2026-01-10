@@ -227,12 +227,7 @@
                 </div>
             </a>
             
-            <!-- AXIOM: Replace ./images/axiom.png with your image and update ca.axiom link -->
-            <a id="axiomLink" target="_blank" class="icon-link">
-                <div class="icon-circle">
-                    <img src="./images/axiom.png" alt="Axiom">
-                </div>
-            </a>
+            <!-- AXIOM removed -->
         </div>
     </div>
 
@@ -251,8 +246,7 @@
         const addy = "C5abVpFgKa2whKgW4DSRnoEjL8b48uPKi2aKBd4cpump";
         const ca = {
             pump: "https://pump.fun/coin/" + addy,
-            dex: "https://dexscreener.com/solana/" + addy,
-            axiom: "https://axiom.trade/meme/" + addy
+            dex: "https://dexscreener.com/solana/" + addy
         };
 
         let count = 0;
@@ -263,7 +257,6 @@
         // Set links from ca variable
         document.getElementById('pumpLink').href = ca.pump;
         document.getElementById('dexLink').href = ca.dex;
-        document.getElementById('axiomLink').href = ca.axiom;
 
         // Wire up addy copy behavior
         const addyDisplay = document.getElementById('addyDisplay');
@@ -296,30 +289,37 @@
             }
         });
 
-        whaleContainer.addEventListener('mousedown', (e) => {
-            if (e.button === 0) { // MB1 (left click)
-                count++;
-                document.getElementById('counter').textContent = count;
-                
-                // Change to popped image
-                whaleImage.src = './images/whale_popped.png';
-                
-                // Remove and re-add bounce animation
-                whaleContainer.classList.remove('whale-bounce');
-                void whaleContainer.offsetWidth;
-                whaleContainer.classList.add('whale-bounce');
-            }
+        // Use pointer events so touch (mobile) and mouse both work
+        whaleContainer.addEventListener('pointerdown', (e) => {
+            // only handle primary pointer; ignore secondary touches
+            if (e.isPrimary === false) return;
+            // for mouse, ensure left button
+            if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+            count++;
+            document.getElementById('counter').textContent = count;
+
+            // Change to popped image
+            whaleImage.src = './images/whale_popped.png';
+
+            // Remove and re-add bounce animation
+            whaleContainer.classList.remove('whale-bounce');
+            void whaleContainer.offsetWidth;
+            whaleContainer.classList.add('whale-bounce');
         });
 
-        whaleContainer.addEventListener('mouseup', (e) => {
-            if (e.button === 0) { // MB1 (left click)
-                // Change back to unpopped image
-                whaleImage.src = './images/whale_unpopped.png';
-            }
+        whaleContainer.addEventListener('pointerup', (e) => {
+            if (e.isPrimary === false) return;
+            whaleImage.src = './images/whale_unpopped.png';
         });
 
-        whaleContainer.addEventListener('mouseleave', () => {
-            // Change back to unpopped if mouse leaves while pressed
+        whaleContainer.addEventListener('pointercancel', () => {
+            whaleImage.src = './images/whale_unpopped.png';
+            whaleContainer.classList.remove('whale-bounce');
+        });
+
+        whaleContainer.addEventListener('pointerleave', () => {
+            // revert visuals if pointer leaves
             whaleImage.src = './images/whale_unpopped.png';
             whaleContainer.classList.remove('whale-bounce');
         });
