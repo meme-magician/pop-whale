@@ -243,6 +243,11 @@
         <img src="./images/whale_unpopped.png" alt="White Whale" id="whaleImage">
     </div>
 
+    <!-- Pop sound -->
+    <audio id="popSound" preload="auto">
+        <source src="./pop.mp3" type="audio/mpeg">
+    </audio>
+
     <!-- Address (copyable) placed under the whale image -->
     <div id="addyDisplay" class="addy" role="button" aria-label="Click to copy address" title="Click to copy address">C5abVpFgKa2whKgW4DSRnoEjL8b48uPKi2aKBd4c</div>
 
@@ -304,6 +309,11 @@
 
             count++;
             document.getElementById('counter').textContent = count;
+
+            // Play pop sound
+            const popSound = document.getElementById('popSound');
+            popSound.currentTime = 0; // Reset to start
+            popSound.play().catch(err => console.log('Audio play failed:', err));
 
             // Change to popped image
             whaleImage.src = './images/whale_popped.png';
